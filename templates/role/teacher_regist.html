@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Regist</title>
+
+    <script>
+
+        function validate_required(filed, alerttext)
+        {
+            with (filed)
+            {
+                if (value == null || value == "")
+                {
+                    alert(alerttext);
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
+
+        function validate_password(pw,repw)
+        {
+            if (pw.value === repw.value)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        function value_form(thisform)
+        {
+            with (thisform)
+            {
+
+                if (validate_password(password, pw_confirm)==false)
+                {
+                    password.focus();
+                    alert("password error");
+                    return false;
+                }
+
+                else if (validate_required(username, "username null")==false)
+                {
+                    username.focus();
+                    return false;
+                }
+            }
+        }
+
+    </script>
+
+</head>
+<body>
+
+    Reg
+
+<form action="/role/register/" method="post" onsubmit="return value_form(this)">
+
+    {% csrf_token %}
+    username:
+    <br>
+    <input name="username" >
+    <br>
+    password:
+    <br>
+    <input name="password" type="password" >
+    <br>
+    repeat password:
+    <br>
+    <input name="pw_confirm" type="password">
+    <br>
+
+    <select name="groups">
+        <option value="Teacher">Teacher</option>
+        <option value="Student">Student</option>
+    </select>
+    <br>
+
+    <input type="submit" value="Submit" id="submit">
+
+</form>
+
+</body>
+</html>

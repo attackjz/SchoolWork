@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload</title>
+</head>
+<body>
+
+<form method="post" action="/role/upload/" >
+    {% csrf_token %}
+
+{#    {{ uf.as_p }}#}
+    courseware name:
+    {{ uf.name }}
+    <br>
+
+    courseware:
+    {{ uf.courseware }}
+
+{#    <br>#}
+    <input id="submit" value="submit" type="submit">
+
+</form>
+
+</body>
+</html>
