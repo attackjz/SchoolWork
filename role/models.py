@@ -36,41 +36,38 @@ class Student(models.Model):
         return show_name(self.user)
 
 
-# 班级
-class Team(models.Model):
-    number = models.IntegerField()
-    grade = models.IntegerField()
-    teacher = models.ManyToManyField(Teacher, related_name='teacher')
-    student = models.ManyToManyField(Student, related_name='student')
-
-    def __unicode__(self):
-        return str(self.grade) + '-' + str(self.number)
-
-
-# 课程
+#  科目
 class Subject(models.Model):
     number = models.IntegerField(unique=True)
     name = models.CharField(max_length=32, unique=True)
-    teacher = models.ManyToManyField(Teacher)
-    team = models.ManyToManyField(Team)
+    teacher = models.ForeignKey(Teacher, blank=True)
 
     def __unicode__(self):
         return self.name
 
     class Meta:
-        verbose_name = '课程'
-        verbose_name_plural = '课程'
+        verbose_name = '科目'
+        verbose_name_plural = '科目'
 
+
+# 班级
+class StuToSub(models.Model):
+    student = models.ForeignKey(Student)
+    subject = models.ForeignKey(Subject)
+
+    class Meta:
+        verbose_name = '学生科目关系'
+        verbose_name_plural = '学生科目关系'
 
 
 # 课件
 class Courseware(models.Model):
-    number = models.IntegerField(unique=True, auto_created=True)
+    number = models.IntegerField(unique=True, null=True, )
     name = models.CharField(max_length=64)
-    pub_datetime = models.DateTimeField()
-    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
-    # teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-    file = models.FileField('/static/courseware/')
+    pub_datetime = models.DateTimeField(auto_now_add=True)
+    subject = models.ManyToManyField(Subject)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    file = models.FileField(upload_to='./static/courseware/')
 
     def __unicode__(self):
         return self.name

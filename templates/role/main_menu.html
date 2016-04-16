@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static from staticfiles %}
+<head>
+    <meta charset="UTF-8">
+    <title>menu</title>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script>
+                var system = {
+                    win: false,
+                    mac: false,
+{#                    xll: false,#}
+{#                    ipad:false#}
+                };
+                //检测平台
+                var p = navigator.platform;
+                system.win = p.indexOf("Win") == 0;
+                system.mac = p.indexOf("Mac") == 0;
+{#                system.x11 = (p == "X11") || (p.indexOf("Linux") == 0);#}
+{#                system.ipad = (navigator.userAgent.match(/iPad/i) != null)?true:false;#}
+                //跳转语句
+                if (system.win || system.mac) {
+                    $(function () {
+                        var H = $(window).height();
+                        var wall1 = $("#wall1").height();
+                        document.getElementById('wall').style.height = H + 'px';
+                        document.getElementById('wall2').style.height = (H - wall1) + 'px';
+                    });
+
+                    $(window).resize(function () {
+                        var H = $(window).height();
+                        var wall1 = $("#wall1").height();
+                        document.getElementById('wall').style.height = H + 'px';
+                        document.getElementById('wall2').style.height = (H - wall1) + 'px';
+                    });
+                }
+            </script>
+</head>
+<body>
+
+<div id="wall" style="width: 100%;">
+
+    <div class="row" style="margin: 0;" id="wall1">
+        <div class="col-md-12" style="background: #252524;">
+            <blockquote><h1 class="title"> Couseware <a class="title" style="font-size: medium">{{ user_type }}</a></h1></blockquote>
+        </div>
+    </div>
+
+    <div class="row" style="margin: 0;" id="wall2">
+        <div class="col-md-2" style="background: #5ec0bb; overflow-y: auto; height: 100%;" >
+
+{#            <div class="left">#}
+{#                <a href="/role/upload">#}
+{#                    <button class="btn btn-danger btn-lg btn-block left_button">上传文件</button>#}
+{#                </a>#}
+{#            </div>#}
+
+            {% for k,v in subject_list.items %}
+                <a href="/role/?clicked={{ k }}">
+                    <button class="btn btn-danger btn-lg btn-block left_button" value={{ k }}>{{ v }}</button>
+                </a>
+            {% endfor %}
+
+        </div>
+
+
+        <div class="col-md-10" >
+
+            {% if 'home' == page_type %}
+                <blockquote><h1>Welcome</h1>{{ user_name }}</blockquote>
+            {% endif %}
+
+
+            {#上传#}
+            <span class="glyphicon glyphicon-upload" data-toggle="modal" data-target="#myModal" style="font-size: 30px; color: #337ab7;"></span>
+
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                  </div>
+                  <div class="modal-body">
+                    <form method="post" action="{% url 'role:upload' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="text" name="name" placeholder="not null">
+                        <input type="file" name="upfile">
+                        <input type="hidden" name="" value="">
+                        <input id="submit" value="submit" type="submit">
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+{#        <a href="/role/upload"><button>123</button> </a>#}
+
+
+            <table class="table table-striped" style="text-align: center; width: 60%; margin: auto;">
+                <thead>
+                    <tr>
+                        <th style="padding-left: 15px;">课件名</th>
+                        <th style="text-align: center;">download</th>
+                        {% if 'Teacher' == user_type.name %}
+                             <th style="text-align: center;">delete</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="vertical-align: middle;">12131</td>
+                        <td style="width: 25px;">
+                            <a href="">
+                                <span class="glyphicon glyphicon-download" style="font-size: 20px; color: #337ab7;"></span>
+                            </a>
+                        </td>
+                        {% if "Teacher" == user_type.name %}
+                        <td style="width: 25px;">
+                            <a href="">
+                                <span class="glyphicon glyphicon-remove-circle" style="font-size: 20px; color: red;"></span>
+                            </a>
+                        </td>
+                        {% endif %}
+                    </tr>
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -52,6 +52,12 @@
                     return false;
                 }
             }
+            if(upload.username.value == ""){}
+            else
+            {
+                upload.submit();
+            }
+
         }
 
     </script>
@@ -61,7 +67,7 @@
 
     Reg
 
-<form action="/role/register/" method="post" onsubmit="return value_form(this)">
+<form name="upload" action="/role/register/" method="post" onsubmit="return value_form(this)">
 
     {% csrf_token %}
     username:

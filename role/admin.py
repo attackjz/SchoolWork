@@ -32,11 +32,18 @@ admin.site.unregister(User)
 admin.site.register(User, MyUserAdmin)
 
 
+
+class TeacherInline(admin.TabularInline):
+
+    model = Teacher
+    extra = 1
+
+
 class TeacherAdmin(admin.ModelAdmin):
 
     list_display = (
-        'number',
         'user',
+        'number',
     )
 
 admin.site.register(models.Teacher, TeacherAdmin)
@@ -45,43 +52,32 @@ admin.site.register(models.Teacher, TeacherAdmin)
 class StudentAdmin(admin.ModelAdmin):
 
     list_display = (
-        'number',
         'user',
+        'number',
     )
 
 admin.site.register(models.Student, StudentAdmin)
+# class TeamAdmin(admin.ModelAdmin):
+#
+#     list_display = (
+#         'number',
+#         'grade',
+#     )
+#
+#     filter_horizontal = (
+#
+#         'subject',
+#         # 'student',
+#     )
+#
+#
+# admin.site.register(models.Team, TeamAdmin)
 
 
-class TeamAdmin(admin.ModelAdmin):
+class CoursewareInline(admin.TabularInline):
 
-    list_display = (
-        'number',
-        'grade',
-    )
-
-    filter_horizontal = (
-
-        'teacher',
-        'student',
-    )
-
-
-admin.site.register(models.Team, TeamAdmin)
-
-
-class SubjectAdmin(admin.ModelAdmin):
-
-    list_display = (
-        'number',
-        'name',
-    )
-
-    filter_horizontal = (
-        'teacher',
-        'team',
-    )
-
-admin.site.register(models.Subject, SubjectAdmin)
+    model = Courseware
+    extra = 1
 
 
 class CoursewareAdmin(admin.ModelAdmin):
@@ -89,6 +85,10 @@ class CoursewareAdmin(admin.ModelAdmin):
     list_display = (
         'name',
         'pub_datetime',
+    )
+
+    filter_horizontal = (
+        'subject',
     )
 
     def get_queryset(self, request):
@@ -106,3 +106,36 @@ class CoursewareAdmin(admin.ModelAdmin):
     #     return qs.filter(teacher=s_list)
 
 admin.site.register(models.Courseware, CoursewareAdmin)
+
+
+# class SubjectInline(admin.TabularInline):
+#
+#     model = Subject
+#     extra = 1
+
+
+class SubjectInline(admin.TabularInline):
+    model = Subject
+    extra = 1
+
+
+class SubjectAdmin(admin.ModelAdmin):
+    list_display = (
+        'number',
+        'name',
+        # 'teacher',
+    )
+    # filter_horizontal = (
+    #     'teacher',
+    # )
+
+admin.site.register(models.Subject, SubjectAdmin)
+
+
+class StuToSubAdmin(admin.ModelAdmin):
+    list_display = (
+        'student',
+        'subject',
+    )
+admin.site.register(models.StuToSub, StuToSubAdmin)
+

@@ -1,0 +1,300 @@
+.login{
+    width: 560px;
+    height: 280px;
+    margin:  auto;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    /*border: 2px solid #337ab7;*/
+}
+
+.login #line h3{
+    margin: 0;
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+
+.login h5{
+    margin: 0;
+    padding-bottom: 20px;
+}
+
+.login h3{
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+}
+
+#line{
+    width: 100%;
+    margin: auto;
+    background: #252524;
+    color: #ffffff;
+}
+
+.login-txt{
+    background: #f0f0f0;
+    height: 233px;
+}
+
+.login input{
+    width: 300px;
+}
+
+.login .form-group{
+    margin-left: 20px;
+    margin-right: 0;
+    margin-bottom: 15px !important;
+    text-align: center;
+}
+
+.username,
+.sign_in{
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.password{
+    margin-bottom: 20px;
+}
+
+.error{
+    font-size: 14px;
+    color: #CC3434;
+    font-weight: 900;
+    text-align: center;
+}
+
+.sign_in input{
+
+    width: 230px;
+    height: 40px;
+    background: #252524 !important;
+    color: #ffffff;
+    border: none !important;
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+.sign_in input:hover{
+    color: #ffffff !important;
+    background: #337ab7 !important;
+    opacity: 0.7;
+}
+
+.menu{
+    width: 800px;
+    margin: 0 auto;
+    color: #34495E;
+    padding-top: 20px;
+}
+
+.menu .row h2{
+    margin-top: 10px;
+    margin-left: 10px;
+    color: #34495E;
+}
+
+.menus{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background: #337ab7;
+    height: 50px;
+    line-height: 50px;
+    color: #ffffff;
+}
+
+.menus .row{
+    width: 1000px;
+    margin: 0 auto;
+    height: 50px;
+    line-height: 50px;
+}
+
+.menus .row h3{
+    margin: 0;
+    height: 50px;
+    line-height: 50px;
+}
+
+.menus .row h3 small{
+    color: #ffffff;
+}
+
+.menus .row #username{
+    margin: 0;
+    height: 50px;
+    line-height: 50px;
+}
+
+.menus .row #username a{
+    text-decoration: #ffffff;
+    color: #ffffff;
+}
+
+#menu{
+    width: 800px;
+    height: 300px;
+    margin:  auto;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #f0f0f0;
+}
+
+#username{
+    font-size: 18px;
+    text-align: right;
+    margin-right: 10px;
+    margin-top: 20px;
+}
+
+#username a{
+    margin-right: 20px;
+}
+
+.content,
+.plan{
+    width: 700px;
+    margin: 0 auto;
+    margin-top: 40px;
+}
+
+.content .row{
+    text-align: center;
+    margin-bottom: 20px;
+    color: #34495E;
+}
+
+.content .row a{
+    text-decoration: none;
+}
+
+.content .row a:hover{
+    text-decoration: none;
+}
+
+.content a button{
+    width: 300px;
+    height: 40px;
+    font-size: 18px;
+    background: #2C3E50;
+    color: #ffffff;
+}
+
+.content a button:hover{
+    background: #34495E;
+    color: #ffffff;
+}
+
+#description{
+    height: 250px;
+    resize: none;
+}
+
+#tag_info h4{
+    text-align: center;
+    margin-top: 40px;
+}
+
+.plan h2{
+    color: #000000;
+}
+
+
+.row-name{
+    height: 40px;
+    line-height: 40px;
+    background: #337ab7;
+    color: #ffffff;
+    font-size: 20px;
+}
+
+.row-txt{
+    height: 60px;
+    line-height: 60px;
+    color: #000000;
+    border-right: 2px solid #337ab7;
+    border-left: 2px solid #337ab7;
+    border-bottom: 2px solid #337ab7;
+}
+
+.manager{
+    width: 1000px;
+    margin:  0 auto;
+    margin-top: 20px;
+}
+
+.manager .row ul{
+    width: 100%;
+    height: 250px;
+    list-style: none;
+    padding: 0;
+}
+
+.manager .row ul li{
+    width: 100%;
+    color: #000000;
+    height: 30px;
+    line-height: 30px;
+    font-size: 16px;
+    padding-left: 10px;
+}
+
+.manager .row ul li:hover{
+    width: 100%;
+    background: #337ab7;
+}
+
+.manager .row ul li:hover a{
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.manager .row .col-xs-3{
+    /*border: 2px solid #337ab7;*/
+    background: #f0f0f0;
+}
+
+.manager-panel{
+    width: 100%;
+    height: 50px;
+}
+
+
+.no-group{
+    height: 500px;
+    width: 100%;
+    line-height: 500px;
+    font-size: 20px;
+    background: #f0f0f0;
+    text-align: center;
+}
+
+#back{
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    background: #337ab7;
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+.error{
+    width: 100%;
+    border: 2px solid #cc1111;
+    color: #cc1111;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    font-size: 12px;
+}
