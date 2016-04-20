@@ -6,7 +6,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import *
 
-import datetime
+import time, random, re
 from home.models import *
 
 # Create your models here.
@@ -60,14 +60,24 @@ class StuToSub(models.Model):
         verbose_name_plural = '学生科目关系'
 
 
+# 重命名文件名
+def resource_file_path(instance, filename):
+    # file_time = time.strftime('%Y%m%d%H%M%s', time.localtime(time.time()))
+    ft = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
+    # format = re.search("\.\w+$",  filename)
+    format = re.findall("\.\w+$", filename)
+    filename = str(ft) + instance.name + format[0]
+    return '/'.join(['courseware', 'resource', time.strftime('%m%d', time.localtime(time.time())), filename])
+
+
 # 课件
 class Courseware(models.Model):
-    number = models.IntegerField(unique=True, null=True, )
-    name = models.CharField(max_length=64)
+    # number = models.IntegerField(unique=True, null=True, )
+    name = models.CharField(max_length=128)
     pub_datetime = models.DateTimeField(auto_now_add=True)
     subject = models.ManyToManyField(Subject)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-    file = models.FileField(upload_to='./static/courseware/')
+    file = models.FileField(upload_to=resource_file_path)
 
     def __unicode__(self):
         return self.name

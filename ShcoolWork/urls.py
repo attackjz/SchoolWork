@@ -23,6 +23,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('home.urls', namespace='home')),
     # url(r'^home/', include('home.urls', namespace='home')),
-    url(r'^polls/', include('polls.urls', namespace='polls')),
+    # url(r'^polls/', include('polls.urls', namespace='polls')),
     url(r'^role/', include('role.urls', namespace='role'))
 ]

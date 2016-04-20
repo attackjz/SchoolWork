@@ -45,7 +45,12 @@
 
     <div class="row" style="margin: 0;" id="wall1">
         <div class="col-md-12" style="background: #252524;">
-            <blockquote><h1 class="title"> Couseware <a class="title" style="font-size: medium">{{ user_type }}</a></h1></blockquote>
+            <blockquote>
+                    <h1 class="title"> Couseware <a class="title" style="font-size: medium">{{ user_type }}</a>
+
+                    <a href="/sign_out"><button class="btn btn-link" style="font-size: 20px">Sign Out</button></a>
+                </h1>
+            </blockquote>
         </div>
     </div>
 
@@ -59,7 +64,7 @@
 {#            </div>#}
 
             {% for k,v in subject_list.items %}
-                <a href="/role/?clicked={{ k }}">
+                <a href="/role/home?clicked={{ k }}">
                     <button class="btn btn-danger btn-lg btn-block left_button" value={{ k }}>{{ v }}</button>
                 </a>
             {% endfor %}
@@ -74,8 +79,26 @@
             {% endif %}
 
 
+            {% if '' != returninfo %}
+                <script>
+                    {% if 'file' == returninfo %}
+                        alert("没有选择文件");
+                    {% elif 'name' == returninfo %}
+                        alert("课件名为空");
+                    {% elif 'download_error' == returninfo %}
+                        alert("课件好像出了一些问题！");
+                    {% else %}
+                        alert({{ returninfo }});
+                    {% endif %}
+                </script>
+            {% endif %}
+
+        {% if 0 <= click_id %}
+                <blockquote><a style="font-size: 20px; color: #252524; margin-right: 20px;">Subject:{{ click_name }}</a>
+
+            {% if "Teacher" == user_type.name %}
             {#上传#}
-            <span class="glyphicon glyphicon-upload" data-toggle="modal" data-target="#myModal" style="font-size: 30px; color: #337ab7;"></span>
+            <span class="glyphicon glyphicon-upload" data-toggle="modal" data-target="#myModal" style="font-size: 30px; color: #337ab7;" type="upload"></span>
 
             <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
               <div class="modal-dialog" role="document">
@@ -84,25 +107,32 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">Modal title</h4>
                   </div>
-                  <div class="modal-body">
                     <form method="post" action="{% url 'role:upload' %}" enctype="multipart/form-data">
+                  <div class="modal-body">
                         {% csrf_token %}
-                        <input type="text" name="name" placeholder="not null">
-                        <input type="file" name="upfile">
-                        <input type="hidden" name="" value="">
-                        <input id="submit" value="submit" type="submit">
+                        <div class="form-group">
+                            <label>课件名:</label><br>
+                            <input type="text" name="name" placeholder="courseware name">
+                        </div>
+
+                        <div class="form-group">
+                            <label>课件:</label>
+                            <input type="file" name="upfile">
+                        </div>
+                        <input type="hidden" name="subject" value={{ click_id }}>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" value="submit">submit</button>
+                      </div>
                     </form>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                  </div>
                 </div>
               </div>
             </div>
 {#        <a href="/role/upload"><button>123</button> </a>#}
-
-
+            </blockquote>
+        {% endif %}
+        {% if 0 != courseware_list.size %}
             <table class="table table-striped" style="text-align: center; width: 60%; margin: auto;">
                 <thead>
                     <tr>
@@ -114,25 +144,29 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td style="vertical-align: middle;">12131</td>
-                        <td style="width: 25px;">
-                            <a href="">
-                                <span class="glyphicon glyphicon-download" style="font-size: 20px; color: #337ab7;"></span>
-                            </a>
-                        </td>
-                        {% if "Teacher" == user_type.name %}
-                        <td style="width: 25px;">
-                            <a href="">
-                                <span class="glyphicon glyphicon-remove-circle" style="font-size: 20px; color: red;"></span>
-                            </a>
-                        </td>
-                        {% endif %}
-                    </tr>
+                    {% for k,v in courseware_list.items %}
+                        <tr>
+                            <td style="vertical-align: middle;">{{ v }}</td>
+                            <td style="width: 25px;">
+                                <a href="/role/download?download={{ k }}&clicked={{ click_id }}">
+                                    <span class="glyphicon glyphicon-download" style="font-size: 20px; color: #337ab7;"></span>
+                                </a>
+                            </td>
+                            {% if "Teacher" == user_type.name %}
+                                <td style="width: 25px;">
+                                    <a href="/role/delete?delete={{ k }}&clicked={{ click_id }}">
+                                        <span class="glyphicon glyphicon-remove-circle" style="font-size: 20px; color: red;"></span>
+                                    </a>
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
-
-
+        {% else %}
+            <blockquote><h1>暂时没有课件</h1></blockquote>
+        {% endif %}
+        {% endif %}
         </div>
     </div>
 

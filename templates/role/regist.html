@@ -65,6 +65,17 @@
 </head>
 <body>
 
+    {% if 'success' == info %}
+        <script>
+            alert("注册成功！");
+        </script>
+    {% elif 'faild' == info %}
+        <script>
+            alert("注册失败！");
+        </script>
+    {% endif %}
+
+
     Reg
 
 <form name="upload" action="/role/register/" method="post" onsubmit="return value_form(this)">

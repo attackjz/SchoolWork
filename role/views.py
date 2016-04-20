@@ -3,19 +3,19 @@ from django.shortcuts import render, HttpResponse, HttpResponseRedirect, render_
 from django.contrib.auth import models
 from django.views import generic
 from django import forms
-from wsgiref.util import FileWrapper # 引用下载
+from wsgiref.util import FileWrapper  # 引用下载
 
 
 from role.models import *
 
+import os
 import models
 import re
 import time
 import mimetypes # 下载
 
 def index(request):
-    # templates = 'role/teacher_regist.html'
-
+    # templates = 'role/regist.html'
     if request.user.is_superuser:
         user_type = 'super'
         return HttpResponseRedirect('/admin')
@@ -46,23 +46,34 @@ def index(request):
 
     print sub_list
 
-    # if 'clicked' in request.GET and request.GET['clicked']:
-    #     click_id = request.GET['clicked']
-    #     courseware = Courseware.objects.filter(subject=click_id)
-    #     courseware_list = {}
-    #     for i in courseware:
-    #         print i
-    #         courseware_list[str(i.id)] = i.name
-    #
-    #     print courseware_list
+    clicked = -1
+    click_name = ''
+    courseware_list = {}
+    if 'clicked' in request.GET and request.GET['clicked']:
+        click_id = request.GET['clicked']
+        subject = Subject.objects.get(id=click_id)
+        click_name = subject.name
+        courseware = Courseware.objects.filter(subject=click_id)
+        for i in courseware:
+            print i
+            courseware_list[str(i.id)] = i.name
+        clicked = click_id
+        print courseware_list
+
+    return_info = ''
+    if 'returninfo' in request.GET and request.GET['returninfo']:
+        return_info = request.GET['returninfo']
 
     context = {
         'page_type': 'home',
         'msg ': 'sdawdaw',
         'subject_list': sub_list,
-        # 'courseware_list': courseware_list,
+        'courseware_list': courseware_list,
         'user_type': user_type,
         'user_name': name,
+        'click_id': clicked,
+        'click_name': click_name,
+        'returninfo': return_info,
     }
 
     return render(
@@ -72,44 +83,109 @@ def index(request):
     )
 
 
+# 上传
 def upload(request):
 
     print request.GET
     if request.method == 'POST':
-        if 'file' in request.FILES and request.FILES['file']:
+
+        if 'subject' in request.POST and request.POST['subject']:
+            click_id = request.POST['subject']
+            subject = Subject.objects.get(id=click_id)
+
+        if 'upfile' in request.FILES and request.FILES['upfile']:
             file = request.FILES['upfile']
         else:
-            return HttpResponse('file null!')
+            return HttpResponseRedirect('/role/home?returninfo=file&clicked=' + str(click_id))
         if 'name' in request.POST and request.POST['name']:
             name = request.POST['name']
         else:
-            return HttpResponse('name null!')
+            return HttpResponseRedirect('/role/home?returninfo=name&clicked=' + str(click_id))
+
+        user = request.user
+        teacher = Teacher.objects.get(user=user.id)
 
         upload_file = Courseware(name=name,
-                                 file=file)
+                                 file=file,
+                                 teacher=teacher,
+                                 )
         upload_file.save()
+        upload_file.subject.add(subject)
+
 
     else:
-        return render(request, 'role/upload.html')
+        # return render(request, 'role:home')
+        return HttpResponseRedirect('/role/home?returninfo=error')
 
-    return HttpResponse("successful")
+    return HttpResponseRedirect('/role/home?returninfo=success&clicked=' + str(click_id))
 
-# def download(request):
-    # url = p.resource_file.path
-    #     wrapper = FileWrapper(open(url, 'rb'))
-    #     content_type = mimetypes.guess_type(url)
-    #     response = HttpResponse(wrapper, content_type)
-    #     response['Content-Disposition'] = "attachment; filename=%s" % 'test' + p.group.format
-    #
-    #     return response
+
+def download(request):
+
+    if 'download' in request.GET and request.GET['download']:
+        d = request.GET['download']
+    else:
+        return HttpResponseRedirect('/')
+
+    if 'clicked' in request.GET and request.GET['clicked']:
+        c = request.GET['clicked']
+    else:
+        return HttpResponseRedirect('/')
+
+    courseware = Courseware.objects.get(id=d)
+    url = courseware.file.path
+    if os.path.exists(url):
+        format = re.findall('\.\w+$', url)
+
+        wrapper = FileWrapper(open(url, 'rb'))
+        content_type = mimetypes.guess_type(url)
+        response = HttpResponse(wrapper, content_type)
+        filename = courseware.name + format[0]
+        response['Content-Disposition'] = "attachment; filename=%s" % filename
+
+        return response
+    else:
+        return_url = '/role/home?clicked=' + str(c) + '&returninfo=download_error'
+        return HttpResponseRedirect(return_url)
+
+
+def Delete(request):
+
+    if 'delete' in request.GET and request.GET['delete']:
+        d = request.GET['delete']
+    else:
+        return HttpResponseRedirect('/')
+
+    if 'clicked' in request.GET and request.GET['clicked']:
+        c = request.GET['clicked']
+    else:
+        return HttpResponseRedirect('/')
+
+    courseware = Courseware.objects.get(id=d)
+
+    url = courseware.file.path
+    if os.path.exists(url):
+        os.remove(url)
+
+    courseware.delete()
+
+    return_url = '/role/home?clicked=' + str(c) + '&returninfo=delete'
+    return HttpResponseRedirect(return_url)
+
 
 class Regist(generic.View):
 
-    template_name = 'role/teacher_regist.html'
+    template_name = 'role/regist.html'
 
     def get(self, request):
-        context = {
 
+        info = ''
+
+        if 'info' in request.GET and request.GET['info']:
+            info = request.GET['info']
+
+        context = {
+            'info': info
         }
 
         return render(
@@ -158,18 +234,7 @@ def register(request):
         stu = models.Teacher.objects
         s = models.Teacher(user=user)
         s.save()
-
-    return HttpResponse('regist success')
-    # return render(
-    #     request,
-    #
-    # )
-
-
-# 重命名文件名
-def resource_file_path(instance, filename):
-    file_time = time.strftime('%Y%m%d%H%M%s', time.localtime(time.time()))
-    filename = str(file_time) + instance.group.format
-    return '/'.join([instance.group.name, 'resource', time.strftime('%m%d', time.localtime(time.time())), filename])
+  
+    return HttpResponseRedirect('/role/regist?info=success')
 
 # Create your views here.

@@ -15,7 +15,7 @@ class LoginView(generic.View):
     def get(self, request):
 
         if request.user.is_authenticated():
-            return HttpResponseRedirect('/role')
+            return HttpResponseRedirect('/role/home')
 
         if 'error' in request.GET and request.GET['error']:
             error_code = request.GET['error']
@@ -65,7 +65,7 @@ def sign_in(request):
     else:
         return render(
             request,
-            '/role/upload',
+            '/role/home',
         )
 
 
@@ -78,7 +78,7 @@ def sign_out(request):
 
 def index(request):
     templates = 'home/index.html'
-    # templates = 'role/teacher_regist.html'
+    # templates = 'role/regist.html'
 
     # l = ['a', 'b', 'c', 'd', 'e', ]
     #
@@ -102,7 +102,7 @@ def index(request):
 
 def TeacherRegist(request):
 
-    template = 'role/teacher_regist.html'
+    template = 'role/regist.html'
     print request
     # template = 'home/index.html'
     context = {
@@ -118,7 +118,7 @@ def TeacherRegist(request):
 
 def StudentRegist(request):
 
-    template = 'role/teacher_regist.html'
+    template = 'role/regist.html'
 
     return render(
         request,
