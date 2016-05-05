@@ -179,6 +179,9 @@ class Regist(generic.View):
 
     def get(self, request):
 
+        if not request.user.is_superuser:
+            return HttpResponseRedirect("/")
+
         info = ''
 
         if 'info' in request.GET and request.GET['info']:
@@ -205,6 +208,8 @@ def register(request):
     pw = post_data['password']
     pw_cm = post_data['pw_confirm']
     groups = post_data['groups']
+    first = post_data['first']
+    last = post_data['last']
 
     print "username is %s , pw is %s groups is %s" % (username, pw, groups)
 
@@ -214,7 +219,7 @@ def register(request):
     if pw != pw_cm:
         return HttpResponse("pass error")
 
-    check_user = models.User.objects.filter(username=username) 
+    check_user = models.User.objects.filter(username=username)
 
     if check_user:
         return HttpResponse("username is already in sign")
@@ -222,6 +227,14 @@ def register(request):
     user = models.User.objects.create_user(username, "temp@temp.com", pw)
     user.is_staff = 'True'
     user.save()
+
+    if first:
+        user.first_name = first
+        user.save()
+
+    if last:
+        user.last_name = last
+        user.save()
 
     g = models.Group.objects.get(name=groups)
     user.groups.add(g)
@@ -234,7 +247,7 @@ def register(request):
         stu = models.Teacher.objects
         s = models.Teacher(user=user)
         s.save()
-  
+
     return HttpResponseRedirect('/role/regist?info=success')
 
 # Create your views here.
